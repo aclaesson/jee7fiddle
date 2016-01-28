@@ -33,10 +33,8 @@ public class PersonResource extends Application {
     }
 
     @GET
-    public Persons listPersons() {
-        Persons persons = new Persons();
-        persons.setPersonList(findPersons());
-        return persons;
+    public List<Person> listPersons() {
+        return findPersons();
     }
     
     @GET
@@ -49,12 +47,9 @@ public class PersonResource extends Application {
     public Person savePerson(Person person) {
     	if(person.getId() == null) {
     		Person personToSave = new Person();
-    		personToSave.setId(listPersons().getPersonList().size()+1L);
     		personToSave.setName(person.getName());
     		personToSave.setDescription(person.getDescription());
     		entityManager.persist(person);
-    		entityManager.flush();
-    		entityManager.refresh(person);
     	} else {
     		Person personToUpdate = getPerson(person.getId());
     		personToUpdate.setName(person.getName());

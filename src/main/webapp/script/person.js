@@ -41,7 +41,7 @@ app.controller('personsList', ['$http', '$filter', '$window', function($http, $f
 function getData($http, person) {
 	$http.get("resources/persons")
 		.then(function(response) {
-				var listOfPersons = response.data.personList;
+				var listOfPersons = response.data;
 				person.listOfPersons = listOfPersons;
 				person.totalItems = listOfPersons.length;
 			});
