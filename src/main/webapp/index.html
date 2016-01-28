@@ -5,59 +5,119 @@
 <title></title>
 <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.1/angular-animate.js"></script>
-<script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.1.0.js"></script>
+<script
+	src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.1/angular-animate.js"></script>
+<script
+	src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.1.0.js"></script>
 
 <script src="script/person.js"></script>
-<link rel="stylesheet" type="text/css" href="style/style.css" />
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/ng-grid/2.0.11/ng-grid.min.css" />
+
+<link rel="stylesheet" type="text/css"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
 
 </head>
 
-<body>
+<body ng-controller="personsList as person">
 
 	<br>
-	
-	<div ng-controller="personsList as person">
 
-		<table class="table table-striped table-bordered">
+	<div class="col-md-8">
+
+		<table class="table table-striped table-bordered" ng-model="person.tableParams">
 			<thead>
 				<tr>
 					<th>
-						<button class="btn btn-primary"  ng-click="person.changeOrder('id')">Reverse Order by id
-							<span class="glyphicon glyphicon-arrow-down" ng-show="person.predicate == 'id' && person.reverse == true"></span>
-							<span class="glyphicon glyphicon-arrow-up" ng-show="person.predicate == 'id'  && person.reverse == false"></span>
-						</button>
-					</th>
-					<th>
-						<button class="btn btn-primary"  ng-click="person.changeOrder('name')">Reverse Order by name
-							<span class="glyphicon glyphicon-arrow-down" ng-show="person.predicate == 'name' && person.reverse == true" ></span>
-							<span class="glyphicon glyphicon-arrow-up" ng-show="person.predicate == 'name' && person.reverse == false"></span>
+						<button class="btn btn-primary"
+							ng-click="person.changeOrder('name')">
+							Reverse Order by name <span
+								class="glyphicon glyphicon-arrow-down"
+								ng-show="person.predicate == 'name' && person.reverse == true"></span>
+							<span class="glyphicon glyphicon-arrow-up"
+								ng-show="person.predicate == 'name' && person.reverse == false"></span>
 						</button>
 					</th>
 				</tr>
 			</thead>
 			<thead>
 				<tr>
-					<th>id</th>
 					<th>name</th>
 					<th>description</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="person in person.listOfPersons.slice(((person.currentPage-1)*person.itemsPerPage), ((person.currentPage)*person.itemsPerPage))">
-					<td>{{ person.id }}</td>
+				<tr
+					ng-repeat="person in person.listOfPersons.slice(((person.currentPage-1)*person.itemsPerPage), ((person.currentPage)*person.itemsPerPage))">
 					<td>{{ person.name }}</td>
 					<td>{{ person.description }}</td>
 				</tr>
 			</tbody>
 		</table>
-		
-		<uib-pagination total-items="person.totalItems" ng-model="person.currentPage" ng-change="" items-per-page="person.itemsPerPage"></uib-pagination>
+		<uib-pagination total-items="person.totalItems"
+			ng-model="person.currentPage"
+			items-per-page="person.itemsPerPage"></uib-pagination>
 		<br>
-		
 	</div>
 
+
+
+
+
+
+
+
+	<div class="col-md-4">
+
+		<div class="form" >
+			<!-- Verify person, if there is no id present, that we are Adding a Person -->
+			<div>
+				<h3>Add Person</h3>
+			</div>
+
+			<div>
+				<!-- Specify the function to be called on submit and disable HTML5 validation, since we're using Angular validation-->
+				<form name="personForm" ng-submit="updatePerson()" novalidate>
+
+					<!-- Display an error if the input is invalid and is dirty (only when someone changes the value) -->
+					<div class="form-group"
+						ng-class="{'has-error' : personForm.name.$invalid && personForm.name.$dirty}">
+						<label for="name">Name:</label>
+						<!-- Display a check when the field is valid and was modified -->
+						<span
+							ng-class="{'glyphicon glyphicon-ok' : personForm.name.$valid && personForm.name.$dirty}"></span>
+
+						<input id="name" name="name" type="text" class="form-control"
+							maxlength="50" ng-model="person.newPerson.name" required ng-minlength="2"
+							ng-maxlength="50" />
+						
+					</div>
+
+					<!-- Display an error if the input is invalid and is dirty (only when someone changes the value) -->
+					<div class="form-group"
+						ng-class="{'has-error' : personForm.description.$invalid && personForm.description.$dirty}">
+						<label for="description">Description:</label>
+						<!-- Display a check when the field is valid and was modified -->
+						<span
+							ng-class="{'glyphicon glyphicon-ok' : personForm.description.$valid && personForm.description.$dirty}"></span>
+
+						<input id="description" name="description" type="text"
+							class="form-control" maxlength="100"
+							ng-model="person.newPerson.description" required ng-minlength="5"
+							ng-maxlength="100" />
+
+					</div>
+
+
+					<!-- Form buttons. The 'Save' button is only enabled when the form is valid. -->
+					<div class="buttons">
+						<button type="button" class="btn btn-primary"
+							ng-click="person.clearForm()">Clear</button>
+						<button type="button" class="btn btn-primary"
+							ng-disabled="personForm.$invalid" ng-click="person.updatePerson()">Save</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
 </body>
 </html>

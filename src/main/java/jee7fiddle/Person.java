@@ -5,7 +5,10 @@ import javax.persistence.*;
 
 @Entity
 public class Person {
-    @Id
+    
+	@Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id")
+    @SequenceGenerator(name = "id", sequenceName = "id")
     private Long id;
 
     private String name;
